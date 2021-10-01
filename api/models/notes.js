@@ -1,8 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-//const users = require('./users');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Notes extends Model {
     /**
@@ -12,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Player.belongsTo(Team);
       Notes.belongsTo(models.Users, {
         foreignKey: 'authorId'
       }); // Sem definição da FK o Sequelize cria por default

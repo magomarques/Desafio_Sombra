@@ -1,6 +1,6 @@
-const bodyParser = require('body-parser')
-const users = require('./usersRoute')
-const notes = require('./notesRoute')
+const bodyParser = require('body-parser');
+const users = require('./usersRoute');
+const notes = require('./notesRoute');
 
 module.exports = app => {
     app.use(bodyParser.json())

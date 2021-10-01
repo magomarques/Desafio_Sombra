@@ -1,12 +1,12 @@
-const express = require('express')
-const routes = require('./routes')
+const express = require('express');
+const routes = require('./routes');
 
-const app = express()
+const app = express();
 
-const porta = 3000
+const porta = 3000;
 
-routes(app)
+routes(app);
 
-app.listen(porta, () => console.log(`Servidor rodando na porta ${porta}`))
+app.listen(porta, () => console.log(`Servidor rodando na porta ${porta}`));
 
-module.exports = app
+module.exports = app;

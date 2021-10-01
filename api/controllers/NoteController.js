@@ -1,4 +1,4 @@
-const database = require('../models')
+const database = require('../models');
 
 class NoteController {
 
@@ -7,13 +7,13 @@ class NoteController {
         // Para acessar a tabela Notes:
         // http://localhost:3000/notes
 
-        const newNote = req.body
+        const newNote = req.body;
 
         try {
-            const newNoteCreated = await database.Notes.create(newNote)
-            return res.status(200).json(newNoteCreated)
+            const newNoteCreated = await database.Notes.create(newNote);
+            return res.status(200).json(newNoteCreated);
         } catch (error) {
-            return res.status(500).json(error.message)
+            return res.status(500).json(error.message);
         }
     }
 
@@ -23,10 +23,10 @@ class NoteController {
         // http://localhost:3000/notes
 
         try{
-            const allNotes = await database.Notes.findAll()
-            return res.status(200).json(allNotes)
+            const allNotes = await database.Notes.findAll();
+            return res.status(200).json(allNotes);
         } catch (error) {
-            return res.status(500).json(error.message)
+            return res.status(500).json(error.message);
         }
     }
 
@@ -36,17 +36,17 @@ class NoteController {
         // http://localhost:3000/users/26/notes
         // http://localhost:3000/users/userId/notes
 
-        const { userId } = req.params
+        const { userId } = req.params;
 
         try {
             const userNotes = await database.Notes.findAll({
                 where: {
                     authorId: Number(userId)
                 }
-            })
-            return res.status(200).json(userNotes)
+            });
+            return res.status(200).json(userNotes);
         } catch (error) {
-            return res.status(500).json(error.message)
+            return res.status(500).json(error.message);
         }
     }
 
@@ -56,23 +56,24 @@ class NoteController {
         // http://localhost:3000/notes/6
         // http://localhost:3000/notes/id
 
-        const { id } = req.params
-        const newData = req.body
+        const { id } = req.params;
+        const newData = req.body;
 
         try {
             await database.Notes.update(newData, {
                 where: {
                     id: Number(id)
                 }
-            })
+            });
             const updatedNote = await database.Notes.findOne({
                 where: {
-                    id: Number(id) }
+                    id: Number(id)
                 }
-            )
-            return res.status(200).json(updatedNote)
+            });
+
+            return res.status(200).json(updatedNote);
         } catch (error) {
-            return res.status(500).json(error.message)
+            return res.status(500).json(error.message);
         }
     }
 
@@ -82,7 +83,7 @@ class NoteController {
         // http://localhost:3000/users/26/notes/5
         // http://localhost:3000/users/userId/notes/id
 
-        const { userId, id } = req.params
+        const { userId, id } = req.params;
 
         try {
             const deletedNote = await database.Notes.destroy({
@@ -90,25 +91,25 @@ class NoteController {
                     id: Number(id),
                     authorId: Number(userId)
                 }
-            })
+            });
 
             if (!deletedNote) {
-                throw new Error('Usuário não autorizado')
+                throw new Error('Usuário ou nota não vinculados');
             }
 
-            return res.status(200).json({ mensagem: `ID = ${id} foi deletado` })
+            return res.status(200).json({ mensagem: `ID = ${id} foi deletado` });
         } catch (error) {
-            return res.status(500).json(error.message)
+            return res.status(500).json(error.message);
         }
     }
 
-    static async shareNote(req, res){
+    static async shareNote(req, res) {
 
         // Para acessar a tabela Notes associada a tabela Users:
-        // http://localhost:3000/users/26/shared/27/notes/5
-        // http://localhost:3000/users/userId/shared/sharedId/notes/id
+        // http://localhost:3000/users/26/notes/7/shared/27
+        // http://localhost:3000/users/userId/notes/id/shared/sharedId
 
-        const { userId, sharedId, id } = req.params
+        const { userId, id, sharedId } = req.params;
 
         try {
             const sharedNote = await database.Notes.findOne({
@@ -116,31 +117,22 @@ class NoteController {
                     id: Number(id),
                     authorId: userId
                 }
-            })
+            });
 
             const text = sharedNote.description
             const newAuthor = sharedId
-            // const passwordSent = userData.password
-
-            console.log(sharedNote)
-
-            //const jane = await User.create({ name: "Jane" });
 
             const newSharedNote = await database.Notes.create({
                 description: text,
                 authorId: Number(newAuthor)
-            })
+            });
 
-            console.log(newSharedNote)
-
-            return res.status(200).json(newSharedNote)
+            return res.status(200).json(newSharedNote);
         } catch (error) {
-            return res.status(500).json(error.message)
+            return res.status(500).json(error.message);
         }
-
-
     }
 }
 
-module.exports = NoteController
+module.exports = NoteController;
 
